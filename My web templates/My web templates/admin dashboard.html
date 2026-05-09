@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin — Admin Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@300;400;500&family=Geist:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0b0e;
+    --panel: #111318;
+    --panel2: #161820;
+    --border: rgba(255,255,255,0.07);
+    --text: #e8eaf0;
+    --muted: #5a6070;
+    --accent: #6366f1;
+    --green: #22c55e;
+    --red: #ef4444;
+    --yellow: #f59e0b;
+    --blue: #3b82f6;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'Geist', sans-serif; font-weight: 300; display: flex; min-height: 100vh; }
+
+  /* SIDEBAR */
+  .sidebar {
+    width: 220px; background: var(--panel); border-right: 1px solid var(--border);
+    display: flex; flex-direction: column; position: fixed; top: 0; bottom: 0; left: 0; z-index: 50;
+  }
+  .sidebar-brand {
+    padding: 1.5rem 1.25rem; border-bottom: 1px solid var(--border);
+    font-size: 1rem; font-weight: 600; letter-spacing: -0.02em;
+  }
+  .sidebar-brand span { color: var(--accent); }
+  .sidebar-nav { flex: 1; padding: 1rem 0; overflow-y: auto; }
+  .nav-group-label { font-size: 0.6rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); padding: 0.75rem 1.25rem 0.25rem; }
+  .nav-item {
+    display: flex; align-items: center; gap: 0.75rem;
+    padding: 0.6rem 1.25rem; font-size: 0.85rem; color: var(--muted);
+    cursor: pointer; transition: all 0.2s; text-decoration: none;
+    border-left: 2px solid transparent;
+  }
+  .nav-item:hover { color: var(--text); background: rgba(255,255,255,0.03); }
+  .nav-item.active { color: var(--text); background: rgba(99,102,241,0.1); border-left-color: var(--accent); }
+  .nav-item-icon { font-size: 1rem; width: 20px; text-align: center; }
+  .sidebar-user {
+    padding: 1rem 1.25rem; border-top: 1px solid var(--border);
+    display: flex; align-items: center; gap: 0.75rem;
+  }
+  .user-avatar {
+    width: 32px; height: 32px; border-radius: 50%;
+    background: var(--accent); display: flex; align-items: center; justify-content: center;
+    font-size: 0.75rem; font-weight: 600; flex-shrink: 0;
+  }
+  .user-info { min-width: 0; }
+  .user-name { font-size: 0.82rem; font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .user-role { font-size: 0.7rem; color: var(--muted); }
+
+  /* MAIN */
+  .main {
+    margin-left: 220px; flex: 1; display: flex; flex-direction: column; min-height: 100vh;
+  }
+
+  /* TOP BAR */
+  .topbar {
+    height: 60px; border-bottom: 1px solid var(--border);
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 0 2rem; background: var(--panel); position: sticky; top: 0; z-index: 40;
+  }
+  .topbar-title { font-size: 1rem; font-weight: 500; }
+  .topbar-right { display: flex; align-items: center; gap: 1rem; }
+  .topbar-search {
+    display: flex; align-items: center; gap: 0.5rem;
+    background: var(--bg); border: 1px solid var(--border);
+    padding: 0.4rem 0.75rem; border-radius: 6px; width: 220px;
+  }
+  .topbar-search input { background: none; border: none; outline: none; color: var(--text); font-size: 0.82rem; font-family: 'Geist', sans-serif; width: 100%; }
+  .topbar-search input::placeholder { color: var(--muted); }
+  .topbar-btn {
+    width: 34px; height: 34px; border-radius: 6px; border: 1px solid var(--border);
+    background: none; color: var(--muted); cursor: pointer; font-size: 1rem;
+    display: flex; align-items: center; justify-content: center; transition: color 0.2s;
+  }
+  .topbar-btn:hover { color: var(--text); }
+  .notif-dot { position: relative; }
+  .notif-dot::after { content: ''; position: absolute; top: 6px; right: 6px; width: 6px; height: 6px; border-radius: 50%; background: var(--red); }
+
+  /* CONTENT */
+  .content { padding: 2rem; flex: 1; }
+  .date-range {
+    display: flex; align-items: center; gap: 1rem; margin-bottom: 2rem;
+  }
+  .date-range span { font-size: 0.75rem; color: var(--muted); }
+  .range-btn {
+    padding: 0.3rem 0.75rem; background: none; border: 1px solid var(--border);
+    color: var(--muted); font-family: 'Geist', sans-serif; font-size: 0.75rem;
+    cursor: pointer; border-radius: 4px; transition: all 0.2s;
+  }
+  .range-btn.active { background: var(--accent); border-color: var(--accent); color: white; }
+  .range-btn:hover:not(.active) { border-color: rgba(255,255,255,0.2); color: var(--text); }
+
+  /* STAT CARDS */
+  .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.25rem; margin-bottom: 1.5rem; }
+  .stat-card { background: var(--panel); border: 1px solid var(--border); padding: 1.5rem; border-radius: 8px; }
+  .stat-label { font-size: 0.75rem; color: var(--muted); margin-bottom: 0.75rem; display: flex; justify-content: space-between; align-items: center; }
+  .stat-label span { font-size: 1rem; }
+  .stat-value { font-size: 1.75rem; font-weight: 600; letter-spacing: -0.03em; margin-bottom: 0.5rem; }
+  .stat-change { font-size: 0.75rem; display: flex; align-items: center; gap: 0.25rem; }
+  .up { color: var(--green); }
+  .down { color: var(--red); }
+
+  /* CHARTS ROW */
+  .charts-row { display: grid; grid-template-columns: 2fr 1fr; gap: 1.25rem; margin-bottom: 1.5rem; }
+  .card { background: var(--panel); border: 1px solid var(--border); border-radius: 8px; padding: 1.5rem; }
+  .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
+  .card-title { font-size: 0.875rem; font-weight: 500; }
+  .card-action { font-size: 0.72rem; color: var(--accent); cursor: pointer; }
+
+  /* BAR CHART */
+  .bar-chart { display: flex; align-items: flex-end; gap: 0.5rem; height: 150px; }
+  .bar-group { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 0.4rem; }
+  .bar {
+    width: 100%; border-radius: 3px 3px 0 0;
+    background: var(--accent); opacity: 0.7; transition: opacity 0.2s;
+    position: relative; cursor: pointer;
+  }
+  .bar:hover { opacity: 1; }
+  .bar.secondary { background: var(--blue); opacity: 0.4; }
+  .bar-label { font-size: 0.6rem; color: var(--muted); }
+
+  /* DONUT */
+  .donut-wrap { display: flex; flex-direction: column; align-items: center; }
+  .donut { width: 140px; height: 140px; position: relative; margin-bottom: 1.5rem; }
+  .donut svg { transform: rotate(-90deg); }
+  .donut-center {
+    position: absolute; inset: 0; display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+  }
+  .donut-val { font-size: 1.5rem; font-weight: 600; }
+  .donut-sub { font-size: 0.6rem; color: var(--muted); }
+  .donut-legend { width: 100%; }
+  .legend-item { display: flex; justify-content: space-between; align-items: center; padding: 0.4rem 0; border-bottom: 1px solid var(--border); font-size: 0.78rem; }
+  .legend-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 0.5rem; }
+
+  /* TABLE */
+  .table-card { background: var(--panel); border: 1px solid var(--border); border-radius: 8px; }
+  .table-card .card-header { padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border); margin-bottom: 0; }
+  table { width: 100%; border-collapse: collapse; }
+  th { padding: 0.75rem 1.5rem; font-size: 0.68rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); text-align: left; border-bottom: 1px solid var(--border); font-weight: 400; }
+  td { padding: 0.875rem 1.5rem; font-size: 0.82rem; border-bottom: 1px solid rgba(255,255,255,0.04); }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: rgba(255,255,255,0.02); }
+  .status-badge {
+    display: inline-block; padding: 0.2rem 0.6rem; border-radius: 100px; font-size: 0.68rem;
+  }
+  .badge-green { background: rgba(34,197,94,0.15); color: var(--green); }
+  .badge-yellow { background: rgba(245,158,11,0.15); color: var(--yellow); }
+  .badge-red { background: rgba(239,68,68,0.15); color: var(--red); }
+  .badge-blue { background: rgba(59,130,246,0.15); color: var(--blue); }
+
+  /* BOTTOM ROW */
+  .bottom-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin-top: 1.5rem; }
+  .activity-item { display: flex; gap: 0.75rem; padding: 0.75rem 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
+  .activity-icon { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; flex-shrink: 0; }
+  .activity-info { flex: 1; }
+  .activity-text { font-size: 0.82rem; margin-bottom: 0.2rem; }
+  .activity-time { font-size: 0.7rem; color: var(--muted); }
+
+  @media (max-width: 1100px) {
+    .stats-row { grid-template-columns: repeat(2, 1fr); }
+    .charts-row { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 768px) {
+    .sidebar { width: 60px; }
+    .sidebar-brand span:last-child, .nav-item span:not(.nav-item-icon), .sidebar-user .user-info { display: none; }
+    .main { margin-left: 60px; }
+    .bottom-row { grid-template-columns: 1fr; }
+    .topbar-search { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-brand"><span>⬡</span> <span>Dukex</span></div>
+  <nav class="sidebar-nav">
+    <div class="nav-group-label">Main</div>
+    <a href="#" class="nav-item active"><span class="nav-item-icon">◉</span><span>Dashboard</span></a>
+    <a href="#" class="nav-item"><span class="nav-item-icon">📊</span><span>Analytics</span></a>
+    <a href="#" class="nav-item"><span class="nav-item-icon">👥</span><span>Users</span></a>
+    <a href="#" class="nav-item"><span class="nav-item-icon">📦</span><span>Products</span></a>
+    <a href="#" class="nav-item"><span class="nav-item-icon">🛒</span><span>Orders</span></a>
+    <div class="nav-group-label">Finance</div>
+    <a href="#" class="nav-item"><span class="nav-item-icon">💳</span><span>Payments</span></a>
+    <a href="#" class="nav-item"><span class="nav-item-icon">📈</span><span>Revenue</span></a>
+    <a href="#" class="nav-item"><span class="nav-item-icon">🧾</span><span>Invoices</span></a>
+    <div class="nav-group-label">System</div>
+    <a href="#" class="nav-item"><span class="nav-item-icon">⚙️</span><span>Settings</span></a>
+    <a href="#" class="nav-item"><span class="nav-item-icon">🔒</span><span>Security</span></a>
+  </nav>
+  <div class="sidebar-user">
+    <div class="user-avatar">AO</div>
+    <div class="user-info">
+      <div class="user-name">John Chege</div>
+      <div class="user-role">Super Admin</div>
+    </div>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<div class="main">
+  <div class="topbar">
+    <div class="topbar-title">Dashboard</div>
+    <div class="topbar-right">
+      <div class="topbar-search"><span>🔍</span><input type="text" placeholder="Search..."></div>
+      <button class="topbar-btn notif-dot">🔔</button>
+      <button class="topbar-btn">🌙</button>
+    </div>
+  </div>
+
+  <div class="content">
+    <div class="date-range">
+      <span>May 1 – May 8, 2026</span>
+      <button class="range-btn">7D</button>
+      <button class="range-btn active">30D</button>
+      <button class="range-btn">90D</button>
+      <button class="range-btn">1Y</button>
+    </div>
+
+    <!-- STATS -->
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-label">Total Revenue <span>💰</span></div>
+        <div class="stat-value">$84,230</div>
+        <div class="stat-change up">↑ 12.4% vs last month</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Active Users <span>👥</span></div>
+        <div class="stat-value">12,840</div>
+        <div class="stat-change up">↑ 8.1% vs last month</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Orders <span>📦</span></div>
+        <div class="stat-value">3,461</div>
+        <div class="stat-change down">↓ 2.3% vs last month</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Conversion Rate <span>📈</span></div>
+        <div class="stat-value">4.2%</div>
+        <div class="stat-change up">↑ 0.8pp vs last month</div>
+      </div>
+    </div>
+
+    <!-- CHARTS -->
+    <div class="charts-row">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Revenue Overview</div>
+          <div class="card-action">Export →</div>
+        </div>
+        <div class="bar-chart" id="barChart"></div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Traffic Sources</div>
+          <div class="card-action">Details →</div>
+        </div>
+        <div class="donut-wrap">
+          <div class="donut">
+            <svg width="140" height="140" viewBox="0 0 140 140">
+              <circle cx="70" cy="70" r="54" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="20"/>
+              <circle cx="70" cy="70" r="54" fill="none" stroke="#6366f1" stroke-width="20" stroke-dasharray="203 136" stroke-dashoffset="0"/>
+              <circle cx="70" cy="70" r="54" fill="none" stroke="#3b82f6" stroke-width="20" stroke-dasharray="81 258" stroke-dashoffset="-203"/>
+              <circle cx="70" cy="70" r="54" fill="none" stroke="#22c55e" stroke-width="20" stroke-dasharray="41 298" stroke-dashoffset="-284"/>
+              <circle cx="70" cy="70" r="54" fill="none" stroke="#f59e0b" stroke-width="20" stroke-dasharray="14 325" stroke-dashoffset="-325"/>
+            </svg>
+            <div class="donut-center"><div class="donut-val">68%</div><div class="donut-sub">Organic</div></div>
+          </div>
+          <div class="donut-legend">
+            <div class="legend-item"><span><span class="legend-dot" style="background:#6366f1"></span>Organic</span><span>68%</span></div>
+            <div class="legend-item"><span><span class="legend-dot" style="background:#3b82f6"></span>Paid Ads</span><span>19%</span></div>
+            <div class="legend-item"><span><span class="legend-dot" style="background:#22c55e"></span>Social</span><span>9%</span></div>
+            <div class="legend-item"><span><span class="legend-dot" style="background:#f59e0b"></span>Referral</span><span>4%</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TABLE -->
+    <div class="table-card">
+      <div class="card-header">
+        <div class="card-title">Recent Orders</div>
+        <div class="card-action">View All →</div>
+      </div>
+      <table id="ordersTable"></table>
+    </div>
+
+    <!-- BOTTOM -->
+    <div class="bottom-row">
+      <div class="card">
+        <div class="card-header"><div class="card-title">Recent Activity</div></div>
+        <div id="activityFeed"></div>
+      </div>
+      <div class="card">
+        <div class="card-header"><div class="card-title">Top Products</div></div>
+        <div id="topProducts"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // BAR CHART
+  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const data = [65,80,55,90,72,95,85,110,75,88,102,84];
+  const maxVal = Math.max(...data);
+  const chart = document.getElementById('barChart');
+  months.forEach((m, i) => {
+    chart.innerHTML += `
+      <div class="bar-group">
+        <div class="bar" style="height:${(data[i]/maxVal)*100}%" title="${m}: $${data[i]}k"></div>
+        <div class="bar-label">${m}</div>
+      </div>`;
+  });
+
+  // TABLE
+  const orders = [
+    { id:'#ORD-8821', customer:'Wanjiru K.', product:'Pro Plan', amount:'$299', status:'Completed', date:'May 8, 2026' },
+    { id:'#ORD-8820', customer:'David O.', product:'Starter Plan', amount:'$49', status:'Pending', date:'May 8, 2026' },
+    { id:'#ORD-8819', customer:'Amara D.', product:'Enterprise', amount:'$999', status:'Processing', date:'May 7, 2026' },
+    { id:'#ORD-8818', customer:'Priya P.', product:'Pro Plan', amount:'$299', status:'Completed', date:'May 7, 2026' },
+    { id:'#ORD-8817', customer:'Samuel K.', product:'Starter Plan', amount:'$49', status:'Failed', date:'May 6, 2026' },
+  ];
+  const statusClass = { Completed:'badge-green', Pending:'badge-yellow', Processing:'badge-blue', Failed:'badge-red' };
+  const t = document.getElementById('ordersTable');
+  t.innerHTML = `<thead><tr><th>Order</th><th>Customer</th><th>Product</th><th>Amount</th><th>Status</th><th>Date</th></tr></thead><tbody>${
+    orders.map(o => `<tr><td style="font-family:'Geist Mono',monospace;font-size:0.75rem;color:var(--muted)">${o.id}</td><td>${o.customer}</td><td>${o.product}</td><td style="font-weight:500">${o.amount}</td><td><span class="status-badge ${statusClass[o.status]}">${o.status}</span></td><td style="color:var(--muted)">${o.date}</td></tr>`).join('')
+  }</tbody>`;
+
+  // ACTIVITY
+  const activities = [
+    { icon:'👤', bg:'rgba(99,102,241,0.15)', text:'New user <strong>Fatima M.</strong> signed up', time:'2 min ago' },
+    { icon:'🛒', bg:'rgba(34,197,94,0.15)', text:'Order <strong>#ORD-8821</strong> marked complete', time:'8 min ago' },
+    { icon:'⚠️', bg:'rgba(245,158,11,0.15)', text:'Server response time spike detected', time:'14 min ago' },
+    { icon:'💳', bg:'rgba(59,130,246,0.15)', text:'New Enterprise subscription from <strong>Nexus Corp</strong>', time:'32 min ago' },
+    { icon:'🔒', bg:'rgba(239,68,68,0.15)', text:'Failed login attempt from unknown IP', time:'1 hr ago' },
+  ];
+  const feed = document.getElementById('activityFeed');
+  activities.forEach(a => {
+    feed.innerHTML += `<div class="activity-item"><div class="activity-icon" style="background:${a.bg}">${a.icon}</div><div class="activity-info"><div class="activity-text">${a.text}</div><div class="activity-time">${a.time}</div></div></div>`;
+  });
+
+  // TOP PRODUCTS
+  const products = [
+    { name:'Pro Plan', revenue:'$32,400', pct:80 },
+    { name:'Enterprise Plan', revenue:'$28,200', pct:70 },
+    { name:'Starter Plan', revenue:'$14,800', pct:37 },
+    { name:'Add-on: API Access', revenue:'$6,400', pct:16 },
+    { name:'One-time Setup', revenue:'$2,430', pct:6 },
+  ];
+  const pp = document.getElementById('topProducts');
+  products.forEach(p => {
+    pp.innerHTML += `
+      <div style="padding:0.6rem 0;border-bottom:1px solid var(--border)">
+        <div style="display:flex;justify-content:space-between;font-size:0.82rem;margin-bottom:0.4rem">
+          <span>${p.name}</span><span style="font-weight:500">${p.revenue}</span>
+        </div>
+        <div style="height:3px;background:rgba(255,255,255,0.05);border-radius:2px">
+          <div style="height:100%;width:${p.pct}%;background:var(--accent);border-radius:2px"></div>
+        </div>
+      </div>`;
+  });
+
+  // Range buttons
+  document.querySelectorAll('.range-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.range-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    });
+  });
+</script>
+</body>
+</html>

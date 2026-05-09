@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dukex — Modern African Kitchen</title>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,300;0,400;1,300;1,400&family=Space+Grotesk:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --night: #0e0c08;
+    --ember: #c85a1a;
+    --gold: #d4a84b;
+    --cream: #f5efe0;
+    --muted: rgba(245,239,224,0.5);
+    --glass: rgba(245,239,224,0.05);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--night); color: var(--cream); font-family: 'Space Grotesk', sans-serif; font-weight: 300; overflow-x: hidden; }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 1.5rem 5%;
+    background: linear-gradient(to bottom, rgba(14,12,8,0.9), transparent);
+  }
+  .nav-logo { font-family: 'Spectral', serif; font-size: 1.4rem; letter-spacing: 0.2em; text-transform: uppercase; }
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a { text-decoration: none; color: var(--muted); font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase; transition: color 0.3s; }
+  .nav-links a:hover { color: var(--cream); }
+  .reserve-btn {
+    padding: 0.6rem 1.5rem; border: 1px solid var(--gold); color: var(--gold);
+    text-decoration: none; font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase;
+    transition: all 0.3s;
+  }
+  .reserve-btn:hover { background: var(--gold); color: var(--night); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center; padding: 8rem 5% 5rem;
+    background: radial-gradient(ellipse at center, #2a1a08 0%, var(--night) 70%);
+    position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23d4a84b' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  }
+  .hero-badge {
+    font-size: 0.7rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold);
+    margin-bottom: 2rem; position: relative;
+  }
+  .hero h1 {
+    font-family: 'Spectral', serif; font-weight: 300; font-style: italic;
+    font-size: clamp(3.5rem, 9vw, 8rem);
+    line-height: 0.95; margin-bottom: 2rem; position: relative;
+  }
+  .hero h1 em { font-style: normal; font-weight: 300; color: var(--gold); }
+  .hero p {
+    font-size: 0.9rem; color: var(--muted); max-width: 440px;
+    line-height: 1.8; margin-bottom: 3rem; position: relative;
+  }
+  .hero-actions { display: flex; gap: 1.5rem; position: relative; }
+  .btn-ember {
+    padding: 1rem 2.5rem; background: var(--ember); color: var(--cream);
+    text-decoration: none; font-size: 0.8rem; letter-spacing: 0.15em; text-transform: uppercase;
+    transition: opacity 0.3s;
+  }
+  .btn-ember:hover { opacity: 0.85; }
+  .btn-outline {
+    padding: 1rem 2.5rem; border: 1px solid var(--muted); color: var(--muted);
+    text-decoration: none; font-size: 0.8rem; letter-spacing: 0.15em; text-transform: uppercase;
+    transition: all 0.3s;
+  }
+  .btn-outline:hover { border-color: var(--cream); color: var(--cream); }
+  .scroll-indicator {
+    position: absolute; bottom: 3rem; left: 50%; transform: translateX(-50%);
+    display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+    font-size: 0.65rem; letter-spacing: 0.2em; color: var(--muted);
+  }
+  .scroll-indicator::after { content: '↓'; animation: bounce 1.5s infinite; }
+  @keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(6px)} }
+
+  /* STORY */
+  .story {
+    padding: 8rem 5%;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 8rem; align-items: center;
+    border-top: 1px solid rgba(245,239,224,0.1);
+  }
+  .story-text .tag { font-size: 0.65rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--gold); margin-bottom: 1.5rem; }
+  .story-text h2 { font-family: 'Spectral', serif; font-weight: 300; font-size: clamp(2rem, 4vw, 3rem); line-height: 1.2; margin-bottom: 1.5rem; }
+  .story-text h2 em { font-style: italic; color: var(--gold); }
+  .story-text p { font-size: 0.875rem; color: var(--muted); line-height: 2; margin-bottom: 1rem; }
+  .story-image {
+    aspect-ratio: 3/4;
+    background: linear-gradient(135deg, #2a1a08, #1a0e04);
+    display: flex; align-items: center; justify-content: center; font-size: 8rem; opacity: 0.6;
+    position: relative;
+  }
+  .story-image::after {
+    content: ''; position: absolute; inset: 20px;
+    border: 1px solid rgba(212,168,75,0.2);
+    pointer-events: none;
+  }
+
+  /* MENU */
+  .menu { padding: 6rem 5%; border-top: 1px solid rgba(245,239,224,0.1); }
+  .menu-header { text-align: center; margin-bottom: 4rem; }
+  .menu-header h2 { font-family: 'Spectral', serif; font-weight: 300; font-size: clamp(2rem, 4vw, 3rem); margin-bottom: 0.5rem; }
+  .menu-header p { font-size: 0.8rem; color: var(--muted); font-style: italic; }
+  .menu-tabs { display: flex; justify-content: center; gap: 0; margin-bottom: 3rem; border: 1px solid rgba(245,239,224,0.1); }
+  .tab-btn {
+    padding: 0.75rem 2rem; background: none; color: var(--muted);
+    border: none; font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase;
+    cursor: pointer; transition: all 0.3s; border-right: 1px solid rgba(245,239,224,0.1);
+  }
+  .tab-btn:last-child { border-right: none; }
+  .tab-btn.active { background: var(--glass); color: var(--cream); }
+  .tab-btn:hover:not(.active) { color: var(--cream); }
+  .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
+  .menu-item {
+    padding: 1.75rem 0; border-bottom: 1px solid rgba(245,239,224,0.08);
+    display: grid; grid-template-columns: 1fr auto; gap: 2rem; align-items: start;
+  }
+  .menu-item:nth-child(odd) { padding-right: 3rem; border-right: 1px solid rgba(245,239,224,0.08); }
+  .menu-item:nth-child(even) { padding-left: 3rem; }
+  .item-name { font-family: 'Spectral', serif; font-size: 1.05rem; margin-bottom: 0.4rem; }
+  .item-desc { font-size: 0.78rem; color: var(--muted); line-height: 1.6; }
+  .item-badge { font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ember); margin-top: 0.25rem; }
+  .item-price { font-family: 'Spectral', serif; font-size: 1rem; color: var(--gold); white-space: nowrap; }
+
+  /* RESERVE */
+  .reserve {
+    padding: 8rem 5%; border-top: 1px solid rgba(245,239,224,0.1);
+    display: grid; grid-template-columns: 1fr 1fr; gap: 6rem;
+  }
+  .reserve-info h2 { font-family: 'Spectral', serif; font-weight: 300; font-size: clamp(2rem, 4vw, 3rem); margin-bottom: 1rem; }
+  .reserve-info p { color: var(--muted); font-size: 0.875rem; line-height: 1.8; margin-bottom: 2rem; }
+  .hours { margin-bottom: 2rem; }
+  .hours-item { display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px solid rgba(245,239,224,0.08); font-size: 0.85rem; }
+  .hours-item span:last-child { color: var(--gold); }
+  .reserve-form { display: flex; flex-direction: column; gap: 1.25rem; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .form-field { display: flex; flex-direction: column; gap: 0.4rem; }
+  .form-field label { font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); }
+  .form-field input, .form-field select {
+    background: var(--glass); border: 1px solid rgba(245,239,224,0.12);
+    color: var(--cream); padding: 0.75rem 1rem; font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.85rem; outline: none; transition: border-color 0.3s; appearance: none;
+  }
+  .form-field input:focus, .form-field select:focus { border-color: var(--gold); }
+  .form-field select option { background: var(--night); }
+  .submit-btn {
+    padding: 1rem; background: var(--ember); color: var(--cream);
+    border: none; font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.8rem; letter-spacing: 0.15em; text-transform: uppercase;
+    cursor: pointer; transition: opacity 0.3s;
+  }
+  .submit-btn:hover { opacity: 0.85; }
+
+  footer {
+    padding: 3rem 5%; border-top: 1px solid rgba(245,239,224,0.1);
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .footer-logo { font-family: 'Spectral', serif; font-size: 1.5rem; letter-spacing: 0.2em; }
+  footer p { font-size: 0.75rem; color: var(--muted); }
+  .social-links { display: flex; gap: 1.5rem; }
+  .social-links a { color: var(--muted); text-decoration: none; font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; transition: color 0.3s; }
+  .social-links a:hover { color: var(--gold); }
+
+  @media (max-width: 768px) {
+    nav { padding: 1rem; }
+    .nav-links { display: none; }
+    .story { grid-template-columns: 1fr; gap: 3rem; }
+    .menu-grid { grid-template-columns: 1fr; }
+    .menu-item:nth-child(odd) { padding-right: 0; border-right: none; }
+    .menu-item:nth-child(even) { padding-left: 0; }
+    .reserve { grid-template-columns: 1fr; gap: 3rem; }
+    footer { flex-direction: column; gap: 1.5rem; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">Dukex</div>
+  <ul class="nav-links">
+    <li><a href="#story">Our Story</a></li>
+    <li><a href="#menu">Menu</a></li>
+    <li><a href="#reserve">Reserve</a></li>
+    <li><a href="#">Events</a></li>
+  </ul>
+  <a href="#reserve" class="reserve-btn">Reserve a Table</a>
+</nav>
+
+<section class="hero">
+  <div class="hero-badge">Nairobi — Modern African Kitchen</div>
+  <h1>Where <em>fire</em><br>meets <em>flavour</em></h1>
+  <p>A celebration of the African continent's extraordinary culinary traditions, reimagined for the modern table.</p>
+  <div class="hero-actions">
+    <a href="#reserve" class="btn-ember">Reserve a Table</a>
+    <a href="#menu" class="btn-outline">Explore Menu</a>
+  </div>
+  <div class="scroll-indicator">Discover</div>
+</section>
+
+<section class="story" id="story">
+  <div class="story-image">🔥</div>
+  <div class="story-text">
+    <div class="tag">Our Philosophy</div>
+    <h2>Cooked with<br><em>memory</em> and fire</h2>
+    <p>Dukex was born from a simple belief: that the richness of African cuisine deserves a stage worthy of its complexity and beauty.</p>
+    <p>Head Chef Akinyi Otieno draws on traditions spanning from Morocco to Cape Town — slow-smoked meats, fermented grains, ancient spice routes — and elevates them with technique and intention.</p>
+    <p>Every plate tells a story. Every meal is a journey.</p>
+  </div>
+</section>
+
+<section class="menu" id="menu">
+  <div class="menu-header">
+    <h2>The Menu</h2>
+    <p>Seasonal ingredients. Ancient techniques. Contemporary vision.</p>
+  </div>
+  <div class="menu-tabs">
+    <button class="tab-btn active">Starters</button>
+    <button class="tab-btn">Mains</button>
+    <button class="tab-btn">Sides</button>
+    <button class="tab-btn">Desserts</button>
+  </div>
+  <div class="menu-grid" id="menuGrid"></div>
+</section>
+
+<section class="reserve" id="reserve">
+  <div class="reserve-info">
+    <h2>Join Us</h2>
+    <p>We welcome guests for dinner Tuesday through Sunday. For parties of 8 or more, please contact us directly.</p>
+    <div class="hours">
+      <div class="hours-item"><span>Tuesday – Thursday</span><span>6pm – 10pm</span></div>
+      <div class="hours-item"><span>Friday – Saturday</span><span>6pm – 11pm</span></div>
+      <div class="hours-item"><span>Sunday</span><span>12pm – 8pm</span></div>
+      <div class="hours-item"><span>Monday</span><span>Closed</span></div>
+    </div>
+    <p style="font-size:0.8rem;color:var(--muted)">📍 The Greenhouse, Karen, Nairobi · +254 745496097</p>
+  </div>
+  <form class="reserve-form" onsubmit="return false;">
+    <div class="form-row">
+      <div class="form-field"><label>First Name</label><input type="text" placeholder="Amara"></div>
+      <div class="form-field"><label>Last Name</label><input type="text" placeholder="Osei"></div>
+    </div>
+    <div class="form-field"><label>Email</label><input type="email" placeholder="amara@example.com"></div>
+    <div class="form-row">
+      <div class="form-field"><label>Date</label><input type="date"></div>
+      <div class="form-field"><label>Time</label>
+        <select><option>6:00 PM</option><option>6:30 PM</option><option>7:00 PM</option><option>7:30 PM</option><option>8:00 PM</option><option>8:30 PM</option></select>
+      </div>
+    </div>
+    <div class="form-field"><label>Guests</label>
+      <select><option>1 Guest</option><option>2 Guests</option><option>3 Guests</option><option>4 Guests</option><option>5 Guests</option><option>6 Guests</option><option>7 Guests</option></select>
+    </div>
+    <div class="form-field"><label>Special Requests</label><input type="text" placeholder="Dietary requirements, occasions..."></div>
+    <button type="submit" class="submit-btn">Confirm Reservation</button>
+  </form>
+</section>
+
+<footer>
+  <div class="footer-logo">Dukex</div>
+  <p>© 2026 Dukex Restaurant, Nairobi</p>
+  <p>John Chege the Coding Duke</p>
+  <div class="social-links">
+    <a href="#">Instagram</a>
+    <a href="#">Facebook</a>
+    <a href="#">TikTok</a>
+  </div>
+</footer>
+
+<script>
+  const starters = [
+    { name: 'Suya Spiced Beef Tartare', desc: 'Grass-fed beef, groundnut vinaigrette, scotch bonnet gel, plantain crisp', price: 'KSh 1,800' },
+    { name: 'Butternut & Berbere Velouté', desc: 'Ethiopian spice blend, coconut cream, seeds & herbs', price: 'KSh 1,200', badge: 'Vegan' },
+    { name: 'Grilled Octopus with Harissa', desc: 'North African harissa, preserved lemon, charred corn', price: 'KSh 2,400' },
+    { name: 'Ugali Blinis, Smoked Trout', desc: 'White maize blinis, Lake Victoria trout, crème fraîche', price: 'KSh 1,600' },
+    { name: 'Peri-Peri Chicken Skewers', desc: 'Mozambican peri-peri, cucumber raita, flatbread', price: 'KSh 1,500' },
+    { name: 'Garden Salad, Mango Vinaigrette', desc: 'Seasonal greens, avocado, grilled mango, toasted sesame', price: 'KSh 1,100', badge: 'Vegan' },
+  ];
+
+  const menuGrid = document.getElementById('menuGrid');
+  starters.forEach(item => {
+    menuGrid.innerHTML += `
+      <div class="menu-item">
+        <div>
+          <div class="item-name">${item.name}</div>
+          <div class="item-desc">${item.desc}</div>
+          ${item.badge ? `<div class="item-badge">${item.badge}</div>` : ''}
+        </div>
+        <div class="item-price">${item.price}</div>
+      </div>`;
+  });
+
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    });
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dukex — Premium Properties</title>
+<link href="https://fonts.googleapis.com/css2?family=Canela+Text:wght@300;400&family=GT+America:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,400;1,300;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f8f6f2;
+    --white: #ffffff;
+    --ink: #1a1814;
+    --warm: #7a7068;
+    --border: #e2ddd6;
+    --gold: #b8964a;
+    --dark: #2a2420;
+    --light: #f0ede6;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--ink); font-family: 'Inter', sans-serif; font-weight: 300; }
+
+  /* NAV */
+  nav {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 1.5rem 5%; border-bottom: 1px solid var(--border);
+    background: var(--white); position: sticky; top: 0; z-index: 100;
+  }
+  .nav-brand { font-family: 'Fraunces', serif; font-size: 1.5rem; font-weight: 300; letter-spacing: 0.05em; }
+  .nav-brand span { color: var(--gold); }
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a { text-decoration: none; color: var(--warm); font-size: 0.82rem; transition: color 0.3s; }
+  .nav-links a:hover { color: var(--ink); }
+  .nav-right { display: flex; gap: 1rem; align-items: center; }
+  .btn-contact {
+    padding: 0.6rem 1.5rem; background: var(--ink); color: white;
+    text-decoration: none; font-size: 0.78rem; letter-spacing: 0.05em;
+    transition: opacity 0.3s;
+  }
+  .btn-contact:hover { opacity: 0.8; }
+
+  /* HERO SEARCH */
+  .hero {
+    min-height: 75vh;
+    background: linear-gradient(135deg, var(--dark) 0%, #3d3028 100%);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    padding: 5rem 5%; text-align: center; position: relative;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 30% 50%, rgba(184,150,74,0.15), transparent 60%);
+  }
+  .hero-tag { font-size: 0.7rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold); margin-bottom: 1.5rem; position: relative; }
+  .hero h1 {
+    font-family: 'Fraunces', serif; font-weight: 300;
+    font-size: clamp(2.5rem, 6vw, 5rem); color: white;
+    line-height: 1.1; margin-bottom: 1rem; position: relative;
+  }
+  .hero h1 em { font-style: italic; color: rgba(255,255,255,0.5); }
+  .hero-sub { color: rgba(255,255,255,0.5); font-size: 0.9rem; margin-bottom: 3rem; position: relative; }
+  .search-bar {
+    display: flex; background: white; max-width: 700px; width: 100%;
+    position: relative; box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+  }
+  .search-field { flex: 1; display: flex; flex-direction: column; padding: 1rem 1.5rem; border-right: 1px solid var(--border); }
+  .search-field label { font-size: 0.6rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--warm); margin-bottom: 0.25rem; }
+  .search-field input, .search-field select {
+    border: none; outline: none; font-family: 'Inter', sans-serif;
+    font-size: 0.9rem; color: var(--ink); background: none; appearance: none;
+  }
+  .search-submit {
+    padding: 0 2rem; background: var(--gold); border: none; color: white;
+    font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase;
+    cursor: pointer; transition: opacity 0.3s; white-space: nowrap;
+  }
+  .search-submit:hover { opacity: 0.85; }
+  .hero-tags { display: flex; gap: 1rem; margin-top: 2rem; flex-wrap: wrap; justify-content: center; position: relative; }
+  .hero-tag-btn {
+    padding: 0.4rem 1rem; border: 1px solid rgba(255,255,255,0.2);
+    color: rgba(255,255,255,0.5); font-size: 0.75rem; cursor: pointer;
+    background: none; font-family: 'Inter', sans-serif;
+    transition: all 0.3s; border-radius: 100px;
+  }
+  .hero-tag-btn:hover { border-color: white; color: white; }
+  .hero-stats {
+    display: flex; gap: 5rem; margin-top: 4rem; position: relative;
+  }
+  .hero-stat { text-align: center; }
+  .hero-stat-num { font-family: 'Fraunces', serif; font-size: 2rem; font-weight: 300; color: white; display: block; }
+  .hero-stat-label { font-size: 0.7rem; color: rgba(255,255,255,0.4); letter-spacing: 0.1em; }
+
+  /* FEATURED */
+  .featured { padding: 5rem 5%; }
+  .section-head { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 3rem; }
+  .section-head h2 { font-family: 'Fraunces', serif; font-weight: 300; font-size: clamp(1.8rem, 3vw, 2.5rem); }
+  .view-all { font-size: 0.8rem; color: var(--gold); text-decoration: none; border-bottom: 1px solid var(--gold); padding-bottom: 2px; }
+  .properties-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }
+  .property-card { background: var(--white); cursor: pointer; transition: box-shadow 0.3s; }
+  .property-card:hover { box-shadow: 0 12px 40px rgba(0,0,0,0.12); }
+  .property-image {
+    aspect-ratio: 4/3; position: relative; overflow: hidden;
+    display: flex; align-items: center; justify-content: center; font-size: 5rem;
+  }
+  .property-badge {
+    position: absolute; top: 1rem; left: 1rem;
+    padding: 0.3rem 0.75rem; font-size: 0.65rem; letter-spacing: 0.1em;
+    text-transform: uppercase; background: var(--gold); color: white;
+  }
+  .property-body { padding: 1.5rem; }
+  .property-price { font-family: 'Fraunces', serif; font-size: 1.5rem; font-weight: 300; margin-bottom: 0.25rem; }
+  .property-name { font-size: 0.9rem; color: var(--warm); margin-bottom: 0.75rem; }
+  .property-specs { display: flex; gap: 1.5rem; font-size: 0.78rem; color: var(--warm); border-top: 1px solid var(--border); padding-top: 0.75rem; margin-top: 0.75rem; }
+  .spec-item { display: flex; align-items: center; gap: 0.3rem; }
+
+  /* LARGE FEATURE */
+  .large-feature {
+    margin: 0 5% 5rem;
+    display: grid; grid-template-columns: 1fr 1fr;
+    background: var(--dark); color: white;
+    min-height: 500px;
+  }
+  .lf-image {
+    background: linear-gradient(135deg, #3d3028, #2a1a10);
+    display: flex; align-items: center; justify-content: center; font-size: 8rem; opacity: 0.5;
+  }
+  .lf-content {
+    padding: 4rem; display: flex; flex-direction: column; justify-content: center;
+  }
+  .lf-tag { font-size: 0.65rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--gold); margin-bottom: 1.5rem; }
+  .lf-content h2 { font-family: 'Fraunces', serif; font-weight: 300; font-size: clamp(1.8rem, 3vw, 2.5rem); margin-bottom: 1rem; line-height: 1.2; }
+  .lf-content p { font-size: 0.85rem; color: rgba(255,255,255,0.55); line-height: 1.8; margin-bottom: 2rem; }
+  .lf-specs { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 2rem; }
+  .lf-spec { padding: 1rem; border: 1px solid rgba(255,255,255,0.1); }
+  .lf-spec-label { font-size: 0.6rem; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(255,255,255,0.4); margin-bottom: 0.25rem; }
+  .lf-spec-val { font-family: 'Fraunces', serif; font-size: 1.1rem; color: var(--gold); }
+  .btn-gold {
+    display: inline-block; padding: 0.9rem 2rem; background: var(--gold);
+    color: white; text-decoration: none; font-size: 0.78rem;
+    letter-spacing: 0.1em; text-transform: uppercase; transition: opacity 0.3s;
+  }
+  .btn-gold:hover { opacity: 0.85; }
+
+  /* AGENTS */
+  .agents { padding: 5rem 5%; border-top: 1px solid var(--border); background: var(--white); }
+  .agents-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; margin-top: 3rem; }
+  .agent-card { text-align: center; }
+  .agent-avatar {
+    width: 100px; height: 100px; border-radius: 50%; margin: 0 auto 1rem;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 2.5rem; background: var(--light);
+  }
+  .agent-name { font-family: 'Fraunces', serif; font-size: 1rem; margin-bottom: 0.25rem; }
+  .agent-title { font-size: 0.75rem; color: var(--warm); margin-bottom: 0.75rem; }
+  .agent-contact {
+    display: inline-block; font-size: 0.72rem; color: var(--gold);
+    text-decoration: none; border-bottom: 1px solid transparent;
+    transition: border-color 0.3s;
+  }
+  .agent-contact:hover { border-color: var(--gold); }
+
+  footer {
+    background: var(--dark); color: rgba(255,255,255,0.5);
+    padding: 4rem 5%; display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 4rem;
+  }
+  .footer-brand { font-family: 'Fraunces', serif; font-size: 1.8rem; color: white; margin-bottom: 1rem; }
+  footer p { font-size: 0.82rem; line-height: 1.8; }
+  footer h4 { color: white; font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 1rem; }
+  footer ul { list-style: none; }
+  footer li { margin-bottom: 0.5rem; }
+  footer a { color: rgba(255,255,255,0.4); text-decoration: none; font-size: 0.82rem; transition: color 0.3s; }
+  footer a:hover { color: white; }
+
+  @media (max-width: 900px) {
+    .properties-grid { grid-template-columns: 1fr 1fr; }
+    .large-feature { grid-template-columns: 1fr; }
+    .lf-image { min-height: 250px; }
+    .agents-grid { grid-template-columns: 1fr 1fr; }
+    .search-bar { flex-direction: column; max-width: 400px; }
+    .search-field { border-right: none; border-bottom: 1px solid var(--border); }
+    footer { grid-template-columns: 1fr; gap: 2rem; }
+    .hero-stats { gap: 2rem; }
+  }
+  @media (max-width: 600px) {
+    .properties-grid { grid-template-columns: 1fr; }
+    .agents-grid { grid-template-columns: 1fr 1fr; }
+    nav { padding: 1rem; }
+    .nav-links { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-brand">Dukex<span>.</span></div>
+  <ul class="nav-links">
+    <li><a href="#">Buy</a></li>
+    <li><a href="#">Rent</a></li>
+    <li><a href="#">New Developments</a></li>
+    <li><a href="#">Sell</a></li>
+    <li><a href="#">Agents</a></li>
+  </ul>
+  <div class="nav-right">
+    <a href="#" class="btn-contact">Contact Us</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-tag">Premium Properties — Kenya & East Africa</div>
+  <h1>Find your <em>perfect</em><br>place to belong</h1>
+  <p class="hero-sub">Discover exceptional homes curated by Nairobi's most trusted agents</p>
+  <div class="search-bar">
+    <div class="search-field">
+      <label>Location</label>
+      <input type="text" placeholder="Karen, Westlands, Kilimani...">
+    </div>
+    <div class="search-field">
+      <label>Type</label>
+      <select><option>All Types</option><option>House</option><option>Apartment</option><option>Villa</option><option>Land</option></select>
+    </div>
+    <div class="search-field">
+      <label>Budget</label>
+      <select><option>Any Budget</option><option>Under KSh 20M</option><option>KSh 20M–50M</option><option>KSh 50M–100M</option><option>KSh 100M+</option></select>
+    </div>
+    <button class="search-submit">Search</button>
+  </div>
+  <div class="hero-tags">
+    <button class="hero-tag-btn">Karen</button>
+    <button class="hero-tag-btn">Westlands</button>
+    <button class="hero-tag-btn">Kilimani</button>
+    <button class="hero-tag-btn">Runda</button>
+    <button class="hero-tag-btn">Muthaiga</button>
+  </div>
+  <div class="hero-stats">
+    <div class="hero-stat"><span class="hero-stat-num">1,240</span><div class="hero-stat-label">Active Listings</div></div>
+    <div class="hero-stat"><span class="hero-stat-num">850+</span><div class="hero-stat-label">Sales This Year</div></div>
+    <div class="hero-stat"><span class="hero-stat-num">98%</span><div class="hero-stat-label">Client Satisfaction</div></div>
+  </div>
+</section>
+
+<section class="featured">
+  <div class="section-head">
+    <h2>Featured Properties</h2>
+    <a href="#" class="view-all">View All Listings →</a>
+  </div>
+  <div class="properties-grid" id="propertiesGrid"></div>
+</section>
+
+<div class="large-feature">
+  <div class="lf-image">🏰</div>
+  <div class="lf-content">
+    <div class="lf-tag">Property of the Month</div>
+    <h2>The Grand Residence, Muthaiga</h2>
+    <p>An extraordinary colonial manor set on 2.5 acres of manicured grounds, completely renovated with modern luxury finishes whilst preserving its historical character.</p>
+    <div class="lf-specs">
+      <div class="lf-spec"><div class="lf-spec-label">Price</div><div class="lf-spec-val">KSh 280M</div></div>
+      <div class="lf-spec"><div class="lf-spec-label">Size</div><div class="lf-spec-val">850 m²</div></div>
+      <div class="lf-spec"><div class="lf-spec-label">Bedrooms</div><div class="lf-spec-val">6 Beds</div></div>
+      <div class="lf-spec"><div class="lf-spec-label">Land</div><div class="lf-spec-val">2.5 Acres</div></div>
+    </div>
+    <a href="#" class="btn-gold">View Full Details</a>
+  </div>
+</div>
+
+<section class="agents">
+  <div class="section-head">
+    <h2>Meet Our Agents</h2>
+    <a href="#" class="view-all">All Agents →</a>
+  </div>
+  <div class="agents-grid">
+    <div class="agent-card"><div class="agent-avatar">👩🏾</div><div class="agent-name">Wanjiru Kamau</div><div class="agent-title">Senior Property Consultant</div><a href="#" class="agent-contact">Contact Wanjiru</a></div>
+    <div class="agent-card"><div class="agent-avatar">👨🏿</div><div class="agent-name">David Omondi</div><div class="agent-title">Luxury Homes Specialist</div><a href="#" class="agent-contact">Contact David</a></div>
+    <div class="agent-card"><div class="agent-avatar">👩🏽</div><div class="agent-name">Priya Patel</div><div class="agent-title">Commercial & Residential</div><a href="#" class="agent-contact">Contact Priya</a></div>
+    <div class="agent-card"><div class="agent-avatar">👨🏾</div><div class="agent-name">Samuel Kiprotich</div><div class="agent-title">New Developments Lead</div><a href="#" class="agent-contact">Contact Samuel</a></div>
+  </div>
+</section>
+
+<footer>
+  <div>
+    <div class="footer-brand">Dukex.</div>
+    <p>Premium real estate advisory and brokerage across Kenya and East Africa since 2010.</p>
+  </div>
+  <div><h4>Company</h4><ul><li><a href="#">About</a></li><li><a href="#">Our Agents</a></li><li><a href="#">Careers</a></li><li><a href="#">Press</a></li></ul></div>
+  <div><h4>Services</h4><ul><li><a href="#">Buy a Home</a></li><li><a href="#">Sell Your Home</a></li><li><a href="#">Rental Management</a></li><li><a href="#">Valuation</a></li></ul></div>
+<div>John Chege the Coding Duke</div>
+</footer>
+
+<script>
+  const properties = [
+    { price: 'KSh 45M', name: 'Modern Villa, Karen', beds: 4, baths: 3, area: '320 m²', bg: '#c9b99a', emoji: '🏡', badge: 'For Sale' },
+    { price: 'KSh 18M', name: 'Penthouse, Westlands', beds: 3, baths: 2, area: '180 m²', bg: '#b0c4d4', emoji: '🏢', badge: 'New Listing' },
+    { price: 'KSh 65M', name: 'Heritage Home, Muthaiga', beds: 5, baths: 4, area: '450 m²', bg: '#d4c0a8', emoji: '🏘️', badge: 'Exclusive' },
+    { price: 'KSh 8.5M/yr', name: 'Townhouse, Kilimani', beds: 3, baths: 2, area: '220 m²', bg: '#b8c8b8', emoji: '🏠', badge: 'For Rent' },
+    { price: 'KSh 32M', name: 'Garden Apartment, Lavington', beds: 4, baths: 3, area: '280 m²', bg: '#c8c0b0', emoji: '🌿', badge: 'For Sale' },
+    { price: 'KSh 120M', name: 'Lakeside Retreat, Naivasha', beds: 6, baths: 5, area: '600 m²', bg: '#b0c0d4', emoji: '🌊', badge: 'Premium' },
+  ];
+
+  const grid = document.getElementById('propertiesGrid');
+  properties.forEach(p => {
+    grid.innerHTML += `
+      <div class="property-card">
+        <div class="property-image" style="background:${p.bg}">
+          <span>${p.emoji}</span>
+          <div class="property-badge">${p.badge}</div>
+        </div>
+        <div class="property-body">
+          <div class="property-price">${p.price}</div>
+          <div class="property-name">${p.name}</div>
+          <div class="property-specs">
+            <div class="spec-item">🛏 ${p.beds} Beds</div>
+            <div class="spec-item">🚿 ${p.baths} Baths</div>
+            <div class="spec-item">📐 ${p.area}</div>
+          </div>
+        </div>
+      </div>`;
+  });
+</script>
+</body>
+</html>
