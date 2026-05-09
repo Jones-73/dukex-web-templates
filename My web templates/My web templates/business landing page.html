@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dukex — Growth Intelligence Platform</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Instrument+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #050810;
+    --surface: #0d1117;
+    --border: rgba(255,255,255,0.08);
+    --text: #f0f2f5;
+    --muted: #6b7280;
+    --accent: #4ade80;
+    --accent2: #818cf8;
+    --gradient: linear-gradient(135deg, #4ade80, #818cf8);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--text); font-family: 'Instrument Sans', sans-serif; overflow-x: hidden; }
+
+  /* Background grid */
+  body::before {
+    content: '';
+    position: fixed; inset: 0; z-index: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+  }
+
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 1.25rem 5%;
+    background: rgba(5,8,16,0.8); backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+  }
+  .logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.3rem; }
+  .logo span { background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a { text-decoration: none; color: var(--muted); font-size: 0.9rem; transition: color 0.3s; }
+  .nav-links a:hover { color: var(--text); }
+  .nav-cta {
+    padding: 0.6rem 1.5rem; background: var(--gradient);
+    color: #050810; font-weight: 600; font-size: 0.85rem;
+    border: none; border-radius: 6px; cursor: pointer; text-decoration: none;
+    transition: opacity 0.3s;
+  }
+  .nav-cta:hover { opacity: 0.85; }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center; padding: 8rem 5% 5rem;
+    position: relative; z-index: 1;
+  }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    padding: 0.4rem 1rem; border: 1px solid var(--border);
+    border-radius: 100px; font-size: 0.75rem; color: var(--accent);
+    margin-bottom: 2rem; background: rgba(74,222,128,0.05);
+  }
+  .hero-badge::before { content: '●'; animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+  h1 {
+    font-family: 'Syne', sans-serif; font-weight: 800;
+    font-size: clamp(2.5rem, 7vw, 6rem);
+    line-height: 1.05; margin-bottom: 1.5rem; letter-spacing: -0.02em;
+  }
+  h1 .gradient { background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .hero-sub {
+    font-size: 1.1rem; color: var(--muted); max-width: 560px;
+    line-height: 1.7; margin-bottom: 3rem;
+  }
+  .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; }
+  .btn-primary {
+    padding: 0.9rem 2rem; background: var(--gradient); color: #050810;
+    font-weight: 600; font-size: 0.95rem; border: none; border-radius: 8px;
+    cursor: pointer; text-decoration: none; transition: opacity 0.3s;
+  }
+  .btn-primary:hover { opacity: 0.85; }
+  .btn-ghost {
+    padding: 0.9rem 2rem; background: transparent; color: var(--text);
+    font-size: 0.95rem; border: 1px solid var(--border); border-radius: 8px;
+    cursor: pointer; text-decoration: none; transition: border-color 0.3s;
+  }
+  .btn-ghost:hover { border-color: rgba(255,255,255,0.3); }
+  .hero-stats {
+    display: flex; gap: 4rem; margin-top: 5rem;
+    border-top: 1px solid var(--border); padding-top: 3rem;
+  }
+  .stat-item { text-align: center; }
+  .stat-num { font-family: 'Syne', sans-serif; font-size: 2.2rem; font-weight: 700; display: block; }
+  .stat-num .g { background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .stat-label { font-size: 0.8rem; color: var(--muted); margin-top: 0.25rem; }
+
+  /* LOGOS */
+  .logos { padding: 3rem 5%; border-top: 1px solid var(--border); position: relative; z-index: 1; }
+  .logos-label { text-align: center; font-size: 0.75rem; color: var(--muted); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 2rem; }
+  .logos-row { display: flex; justify-content: center; gap: 4rem; align-items: center; flex-wrap: wrap; }
+  .logo-item { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700; color: var(--muted); opacity: 0.5; }
+
+  /* FEATURES */
+  .features { padding: 8rem 5%; position: relative; z-index: 1; }
+  .section-header { text-align: center; margin-bottom: 5rem; }
+  .section-tag {
+    display: inline-block; padding: 0.3rem 1rem;
+    border: 1px solid var(--border); border-radius: 100px;
+    font-size: 0.75rem; color: var(--accent2); margin-bottom: 1rem;
+  }
+  .section-header h2 {
+    font-family: 'Syne', sans-serif; font-weight: 800;
+    font-size: clamp(2rem, 4vw, 3rem); letter-spacing: -0.02em;
+  }
+  .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5px; background: var(--border); }
+  .feature-card {
+    background: var(--bg); padding: 2.5rem;
+    transition: background 0.3s;
+  }
+  .feature-card:hover { background: var(--surface); }
+  .feature-icon {
+    width: 48px; height: 48px; border-radius: 12px;
+    background: linear-gradient(135deg, rgba(74,222,128,0.15), rgba(129,140,248,0.15));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.3rem; margin-bottom: 1.5rem;
+    border: 1px solid var(--border);
+  }
+  .feature-card h3 { font-family: 'Syne', sans-serif; font-size: 1.1rem; font-weight: 700; margin-bottom: 0.75rem; }
+  .feature-card p { font-size: 0.875rem; color: var(--muted); line-height: 1.7; }
+
+  /* PRICING */
+  .pricing { padding: 8rem 5%; position: relative; z-index: 1; }
+  .pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; max-width: 1000px; margin: 0 auto; }
+  .pricing-card {
+    padding: 2rem; border: 1px solid var(--border); border-radius: 12px;
+    background: var(--surface); transition: transform 0.3s;
+  }
+  .pricing-card.featured {
+    border-color: var(--accent);
+    background: linear-gradient(135deg, rgba(74,222,128,0.05), rgba(129,140,248,0.05));
+    transform: scale(1.03);
+  }
+  .pricing-card:hover { transform: translateY(-4px); }
+  .pricing-card.featured:hover { transform: scale(1.03) translateY(-4px); }
+  .plan-name { font-family: 'Syne', sans-serif; font-weight: 700; margin-bottom: 0.5rem; }
+  .plan-price { font-family: 'Syne', sans-serif; font-size: 2.5rem; font-weight: 800; margin-bottom: 0.25rem; }
+  .plan-price span { font-size: 1rem; font-weight: 400; color: var(--muted); }
+  .plan-desc { font-size: 0.8rem; color: var(--muted); margin-bottom: 1.5rem; }
+  .plan-features { list-style: none; margin-bottom: 2rem; }
+  .plan-features li { font-size: 0.85rem; padding: 0.4rem 0; color: var(--muted); display: flex; gap: 0.5rem; }
+  .plan-features li::before { content: '✓'; color: var(--accent); flex-shrink: 0; }
+  .plan-btn {
+    width: 100%; padding: 0.8rem; border-radius: 8px; font-weight: 600;
+    font-size: 0.9rem; cursor: pointer; border: 1px solid var(--border);
+    background: transparent; color: var(--text); transition: all 0.3s;
+  }
+  .pricing-card.featured .plan-btn { background: var(--gradient); border: none; color: #050810; }
+  .plan-btn:hover { opacity: 0.8; }
+
+  /* CTA */
+  .cta-section {
+    padding: 8rem 5%; text-align: center; position: relative; z-index: 1;
+    border-top: 1px solid var(--border);
+  }
+  .cta-section h2 {
+    font-family: 'Syne', sans-serif; font-weight: 800;
+    font-size: clamp(2rem, 5vw, 4rem); letter-spacing: -0.02em; margin-bottom: 1.5rem;
+  }
+  .cta-section p { color: var(--muted); font-size: 1rem; margin-bottom: 2.5rem; }
+
+  footer {
+    padding: 2rem 5%; border-top: 1px solid var(--border);
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 0.8rem; color: var(--muted); position: relative; z-index: 1;
+  }
+
+  @media (max-width: 768px) {
+    nav { padding: 1rem; }
+    .nav-links { display: none; }
+    .hero-stats { gap: 2rem; }
+    .features-grid { grid-template-columns: 1fr; }
+    .pricing-grid { grid-template-columns: 1fr; }
+    .pricing-card.featured { transform: none; }
+    footer { flex-direction: column; gap: 1rem; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo"><span>Dukex</span></div>
+  <ul class="nav-links">
+    <li><a href="#features">Features</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+    <li><a href="#">Docs</a></li>
+    <li><a href="#">Blog</a></li>
+  </ul>
+  <a href="#" class="nav-cta">Start Free Trial</a>
+</nav>
+
+<section class="hero">
+  <div class="hero-badge">Now in Public Beta</div>
+  <h1>Turn data into<br><span class="gradient">decisions that win</span></h1>
+  <p class="hero-sub">Dukex unifies your analytics, forecasting, and team intelligence into one platform — giving every leader the clarity to move fast.</p>
+  <div class="hero-actions">
+    <a href="#" class="btn-primary">Start Free — No Credit Card</a>
+    <a href="#" class="btn-ghost">Watch Demo →</a>
+  </div>
+  <div class="hero-stats">
+    <div class="stat-item"><span class="stat-num"><span class="g">12k+</span></span><div class="stat-label">Companies Using Nexus</div></div>
+    <div class="stat-item"><span class="stat-num"><span class="g">98%</span></span><div class="stat-label">Customer Satisfaction</div></div>
+    <div class="stat-item"><span class="stat-num"><span class="g">3.2x</span></span><div class="stat-label">Avg. ROI in Year 1</div></div>
+  </div>
+</section>
+
+<div class="logos">
+  <p class="logos-label">Trusted by fast-moving teams at</p>
+  <div class="logos-row">
+    <div class="logo-item">Stripe</div>
+    <div class="logo-item">Notion</div>
+    <div class="logo-item">Linear</div>
+    <div class="logo-item">Vercel</div>
+    <div class="logo-item">Figma</div>
+    <div class="logo-item">Supabase</div>
+  </div>
+</div>
+
+<section class="features" id="features">
+  <div class="section-header">
+    <div class="section-tag">Features</div>
+    <h2>Everything you need,<br>nothing you don't</h2>
+  </div>
+  <div class="features-grid">
+    <div class="feature-card"><div class="feature-icon">📊</div><h3>Unified Analytics</h3><p>Connect every data source and see your business in one real-time view. No more spreadsheet juggling.</p></div>
+    <div class="feature-card"><div class="feature-icon">🤖</div><h3>AI Forecasting</h3><p>Predictive models trained on your data surface trends before they happen, so you can act early.</p></div>
+    <div class="feature-card"><div class="feature-icon">⚡</div><h3>Instant Alerts</h3><p>Set thresholds and get notified the moment metrics deviate — via Slack, email, or webhook.</p></div>
+    <div class="feature-card"><div class="feature-icon">🗂️</div><h3>Custom Dashboards</h3><p>Drag-and-drop builder lets any team member create the exact view they need in minutes.</p></div>
+    <div class="feature-card"><div class="feature-icon">🔗</div><h3>200+ Integrations</h3><p>Native connectors for Salesforce, HubSpot, Stripe, Postgres, BigQuery, and more.</p></div>
+    <div class="feature-card"><div class="feature-icon">🔒</div><h3>Enterprise Security</h3><p>SOC 2 Type II certified. SSO, RBAC, and audit logs keep your data safe and compliant.</p></div>
+  </div>
+</section>
+
+<section class="pricing" id="pricing">
+  <div class="section-header">
+    <div class="section-tag">Pricing</div>
+    <h2>Straightforward pricing.<br>No surprises.</h2>
+  </div>
+  <div class="pricing-grid">
+    <div class="pricing-card">
+      <div class="plan-name">Starter</div>
+      <div class="plan-price">$29<span>/mo</span></div>
+      <div class="plan-desc">Perfect for small teams getting started</div>
+      <ul class="plan-features">
+        <li>Up to 5 users</li>
+        <li>10 dashboards</li>
+        <li>30-day data history</li>
+        <li>Standard support</li>
+      </ul>
+      <button class="plan-btn">Get Started</button>
+    </div>
+    <div class="pricing-card featured">
+      <div class="plan-name">Growth <span style="font-size:0.7rem;background:linear-gradient(135deg,#4ade80,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">POPULAR</span></div>
+      <div class="plan-price">$99<span>/mo</span></div>
+      <div class="plan-desc">For scaling teams that need more power</div>
+      <ul class="plan-features">
+        <li>Up to 25 users</li>
+        <li>Unlimited dashboards</li>
+        <li>1-year data history</li>
+        <li>AI Forecasting</li>
+        <li>Priority support</li>
+      </ul>
+      <button class="plan-btn">Start Free Trial</button>
+    </div>
+    <div class="pricing-card">
+      <div class="plan-name">Enterprise</div>
+      <div class="plan-price">Custom</div>
+      <div class="plan-desc">Tailored for large organisations</div>
+      <ul class="plan-features">
+        <li>Unlimited users</li>
+        <li>Custom integrations</li>
+        <li>SLA guarantee</li>
+        <li>Dedicated success manager</li>
+      </ul>
+      <button class="plan-btn">Contact Sales</button>
+    </div>
+  </div>
+</section>
+
+<section class="cta-section">
+  <h2>Ready to get started?</h2>
+  <p>Join 12,000+ companies using Dukex to grow smarter.</p>
+  <a href="#" class="btn-primary">Start Free — No Credit Card</a>
+</section>
+
+<footer>
+  <div>© 2026 Dukex Inc.</div>
+  <div>John Chege the Coding Duke</div>
+  <div style="display:flex;gap:2rem"><a href="#" style="color:var(--muted);text-decoration:none">Privacy</a><a href="#" style="color:var(--muted);text-decoration:none">Terms</a><a href="#" style="color:var(--muted);text-decoration:none">Status</a></div>
+</footer>
+
+</body>
+</html>

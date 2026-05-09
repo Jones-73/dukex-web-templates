@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dukex — Curated Home Goods</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #faf8f5;
+    --white: #ffffff;
+    --ink: #1c1917;
+    --warm: #78716c;
+    --border: #e7e2da;
+    --accent: #b45309;
+    --light: #f5f0e8;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--ink); font-family: 'Jost', sans-serif; font-weight: 300; }
+
+  /* TOP BAR */
+  .top-bar {
+    background: var(--ink); color: #fff;
+    text-align: center; padding: 0.6rem;
+    font-size: 0.75rem; letter-spacing: 0.15em;
+  }
+
+  /* NAV */
+  nav {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 1.25rem 4rem; border-bottom: 1px solid var(--border);
+    background: var(--white); position: sticky; top: 0; z-index: 100;
+  }
+  .nav-left { display: flex; gap: 2rem; list-style: none; }
+  .nav-left a { text-decoration: none; color: var(--warm); font-size: 0.82rem; letter-spacing: 0.08em; transition: color 0.3s; }
+  .nav-left a:hover { color: var(--ink); }
+  .nav-brand { font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; font-weight: 300; letter-spacing: 0.1em; }
+  .nav-right { display: flex; gap: 1.5rem; align-items: center; }
+  .nav-icon { cursor: pointer; color: var(--warm); font-size: 1rem; transition: color 0.3s; background: none; border: none; font-family: inherit; }
+  .nav-icon:hover { color: var(--ink); }
+  .cart-btn { position: relative; }
+  .cart-count {
+    position: absolute; top: -6px; right: -6px;
+    width: 16px; height: 16px; border-radius: 50%; background: var(--accent);
+    color: white; font-size: 0.6rem; display: flex; align-items: center; justify-content: center;
+  }
+
+  /* HERO BANNER */
+  .hero-banner {
+    display: grid; grid-template-columns: 1fr 1fr; min-height: 80vh;
+  }
+  .hero-content {
+    display: flex; flex-direction: column; justify-content: center;
+    padding: 6rem 4rem; background: var(--light);
+  }
+  .hero-tag { font-size: 0.7rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--warm); margin-bottom: 1.5rem; }
+  .hero-content h1 {
+    font-family: 'Cormorant Garamond', serif; font-weight: 300;
+    font-size: clamp(3rem, 5vw, 4.5rem); line-height: 1.15; margin-bottom: 1.5rem;
+  }
+  .hero-content h1 em { font-style: italic; }
+  .hero-content p { font-size: 0.9rem; color: var(--warm); line-height: 1.8; margin-bottom: 2.5rem; max-width: 360px; }
+  .shop-btn {
+    display: inline-block; padding: 1rem 2.5rem;
+    background: var(--ink); color: var(--white);
+    text-decoration: none; font-size: 0.8rem; letter-spacing: 0.15em;
+    text-transform: uppercase; transition: opacity 0.3s;
+  }
+  .shop-btn:hover { opacity: 0.8; }
+  .hero-image {
+    background: #c9b99a;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Cormorant Garamond', serif; font-size: 8rem; color: rgba(255,255,255,0.3);
+  }
+
+  /* SECTION HEADER */
+  .section-header {
+    text-align: center; padding: 5rem 4rem 3rem;
+  }
+  .section-header h2 {
+    font-family: 'Cormorant Garamond', serif; font-weight: 300;
+    font-size: clamp(2rem, 4vw, 3rem); margin-bottom: 0.5rem;
+  }
+  .section-header p { color: var(--warm); font-size: 0.85rem; }
+
+  /* PRODUCT GRID */
+  .products { padding: 0 4rem 6rem; }
+  .products-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; }
+  .product-card { cursor: pointer; }
+  .product-image {
+    aspect-ratio: 3/4; margin-bottom: 1rem; overflow: hidden;
+    position: relative;
+  }
+  .product-image-bg {
+    width: 100%; height: 100%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 4rem; transition: transform 0.5s ease;
+  }
+  .product-card:hover .product-image-bg { transform: scale(1.04); }
+  .product-actions {
+    position: absolute; bottom: 1rem; left: 1rem; right: 1rem;
+    display: flex; gap: 0.5rem;
+    opacity: 0; transform: translateY(8px);
+    transition: all 0.3s;
+  }
+  .product-card:hover .product-actions { opacity: 1; transform: translateY(0); }
+  .btn-add-cart {
+    flex: 1; padding: 0.7rem; background: var(--ink); color: white;
+    border: none; font-family: 'Jost', sans-serif; font-size: 0.75rem;
+    letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer;
+    transition: opacity 0.3s;
+  }
+  .btn-add-cart:hover { opacity: 0.8; }
+  .btn-wishlist {
+    padding: 0.7rem 0.9rem; background: white; border: none;
+    cursor: pointer; font-size: 1rem;
+  }
+  .product-meta { padding: 0 0.25rem; }
+  .product-name { font-size: 0.9rem; margin-bottom: 0.25rem; }
+  .product-material { font-size: 0.75rem; color: var(--warm); margin-bottom: 0.5rem; }
+  .product-price { font-size: 0.95rem; color: var(--ink); }
+  .product-price .old { text-decoration: line-through; color: var(--warm); font-size: 0.8rem; margin-right: 0.5rem; }
+  .product-price .sale { color: var(--accent); }
+
+  /* COLLECTION BANNER */
+  .collection-banner {
+    margin: 0 4rem 6rem;
+    display: grid; grid-template-columns: 1fr 1fr;
+    background: var(--ink); color: white;
+    min-height: 400px;
+  }
+  .collection-content {
+    padding: 4rem; display: flex; flex-direction: column; justify-content: center;
+  }
+  .collection-content h2 {
+    font-family: 'Cormorant Garamond', serif; font-weight: 300;
+    font-size: 3rem; margin-bottom: 1rem; line-height: 1.1;
+  }
+  .collection-content h2 em { font-style: italic; opacity: 0.6; }
+  .collection-content p { font-size: 0.85rem; opacity: 0.6; line-height: 1.8; margin-bottom: 2rem; max-width: 300px; }
+  .btn-light {
+    display: inline-block; padding: 0.9rem 2rem; border: 1px solid rgba(255,255,255,0.4);
+    color: white; text-decoration: none; font-size: 0.75rem;
+    letter-spacing: 0.15em; text-transform: uppercase; transition: all 0.3s;
+  }
+  .btn-light:hover { background: white; color: var(--ink); }
+  .collection-image {
+    background: #3d3028;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 6rem; opacity: 0.3;
+  }
+
+  /* CART SIDEBAR */
+  .cart-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 200;
+    opacity: 0; pointer-events: none; transition: opacity 0.3s;
+  }
+  .cart-overlay.open { opacity: 1; pointer-events: all; }
+  .cart-sidebar {
+    position: fixed; top: 0; right: 0; bottom: 0; width: 400px;
+    background: white; z-index: 201; transform: translateX(100%);
+    transition: transform 0.4s cubic-bezier(0.16,1,0.3,1);
+    display: flex; flex-direction: column;
+  }
+  .cart-sidebar.open { transform: translateX(0); }
+  .cart-header {
+    padding: 1.5rem 2rem; border-bottom: 1px solid var(--border);
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .cart-header h3 { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; font-weight: 300; }
+  .close-btn { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--warm); }
+  .cart-items { flex: 1; overflow-y: auto; padding: 1.5rem 2rem; }
+  .cart-item { display: flex; gap: 1rem; margin-bottom: 1.5rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--border); }
+  .cart-item-img {
+    width: 80px; height: 100px; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 2.5rem;
+  }
+  .cart-item-info { flex: 1; }
+  .cart-item-name { font-size: 0.9rem; margin-bottom: 0.25rem; }
+  .cart-item-price { font-size: 0.85rem; color: var(--warm); }
+  .cart-item-qty { display: flex; align-items: center; gap: 0.75rem; margin-top: 0.75rem; }
+  .qty-btn { width: 24px; height: 24px; border: 1px solid var(--border); background: none; cursor: pointer; font-size: 0.9rem; }
+  .cart-footer { padding: 1.5rem 2rem; border-top: 1px solid var(--border); }
+  .cart-total { display: flex; justify-content: space-between; margin-bottom: 1rem; font-size: 0.9rem; }
+  .cart-total strong { font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; }
+  .checkout-btn {
+    width: 100%; padding: 1rem; background: var(--ink); color: white;
+    border: none; font-family: 'Jost', sans-serif;
+    font-size: 0.8rem; letter-spacing: 0.15em; text-transform: uppercase;
+    cursor: pointer; transition: opacity 0.3s;
+  }
+  .checkout-btn:hover { opacity: 0.8; }
+
+  footer {
+    background: var(--ink); color: rgba(255,255,255,0.6);
+    padding: 4rem; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 3rem;
+  }
+  .footer-brand { font-family: 'Cormorant Garamond', serif; font-size: 2rem; color: white; margin-bottom: 1rem; }
+  footer p, footer li { font-size: 0.8rem; line-height: 2; }
+  footer h4 { color: white; font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 1rem; }
+  footer ul { list-style: none; }
+  footer a { color: rgba(255,255,255,0.5); text-decoration: none; }
+  footer a:hover { color: white; }
+
+  @media (max-width: 900px) {
+    nav { padding: 1rem; }
+    .nav-left { display: none; }
+    .hero-banner { grid-template-columns: 1fr; }
+    .hero-image { min-height: 300px; }
+    .products { padding: 0 1rem 4rem; }
+    .products-grid { grid-template-columns: repeat(2, 1fr); }
+    .collection-banner { grid-template-columns: 1fr; margin: 0 1rem 4rem; }
+    .collection-image { display: none; }
+    footer { grid-template-columns: 1fr 1fr; gap: 2rem; padding: 2rem; }
+    .cart-sidebar { width: 100%; }
+  }
+</style>
+</head>
+<body>
+
+<div class="top-bar">Free shipping on orders over $150 — Use code WELCOME20 for 20% off your first order</div>
+
+<nav>
+  <ul class="nav-left">
+    <li><a href="#">New In</a></li>
+    <li><a href="#">Living</a></li>
+    <li><a href="#">Kitchen</a></li>
+    <li><a href="#">Bedroom</a></li>
+    <li><a href="#">Sale</a></li>
+  </ul>
+  <div class="nav-brand">DUKEX</div>
+  <div class="nav-right">
+    <button class="nav-icon">🔍</button>
+    <button class="nav-icon">♡</button>
+    <button class="nav-icon cart-btn" onclick="toggleCart()">
+      🛍
+      <span class="cart-count" id="cartCount">2</span>
+    </button>
+  </div>
+</nav>
+
+<section class="hero-banner">
+  <div class="hero-content">
+    <p class="hero-tag">New Collection — Autumn 2026</p>
+    <h1>Objects made to<br><em>last a lifetime</em></h1>
+    <p>Curated pieces that bring warmth, intention, and beauty to every room in your home.</p>
+    <a href="#" class="shop-btn">Shop the Collection</a>
+  </div>
+  <div class="hero-image">⌂</div>
+</section>
+
+<div class="section-header">
+  <h2>New Arrivals</h2>
+  <p>Thoughtfully sourced from artisans around the world</p>
+</div>
+
+<section class="products">
+  <div class="products-grid" id="productsGrid"></div>
+</section>
+
+<div class="collection-banner">
+  <div class="collection-content">
+    <h2>The Autumn<br><em>Edit</em></h2>
+    <p>Warm tones, tactile materials, and considered forms — curated for the season of gathering.</p>
+    <a href="#" class="btn-light">Explore the Edit</a>
+  </div>
+  <div class="collection-image">🍂</div>
+</div>
+
+<footer>
+  <div>
+    <div class="footer-brand">DUKEX</div>
+    <p>Beautiful things for beautiful homes. Curated with care, delivered with love.</p>
+  </div>
+  <div><h4>Shop</h4><ul><li><a href="#">New Arrivals</a></li><li><a href="#">Living Room</a></li><li><a href="#">Kitchen</a></li><li><a href="#">Bedroom</a></li><li><a href="#">Sale</a></li></ul></div>
+  <div><h4>Info</h4><ul><li><a href="#">About Us</a></li><li><a href="#">Sustainability</a></li><li><a href="#">Returns</a></li><li><a href="#">FAQ</a></li></ul></div>
+  <div><h4>Connect</h4><ul><li><a href="#">Instagram</a></li><li><a href="#">Pinterest</a></li><li><a href="#">Newsletter</a></li></ul></div>
+  <div>John Chege the Coding Duke</div>
+</footer>
+
+<!-- CART SIDEBAR -->
+<div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
+<div class="cart-sidebar" id="cartSidebar">
+  <div class="cart-header">
+    <h3>Your Basket (2)</h3>
+    <button class="close-btn" onclick="toggleCart()">×</button>
+  </div>
+  <div class="cart-items">
+    <div class="cart-item">
+      <div class="cart-item-img" style="background:#f0ebe2">🏺</div>
+      <div class="cart-item-info">
+        <div class="cart-item-name">Ceramic Vase — Sand</div>
+        <div class="cart-item-price">$85.00</div>
+        <div class="cart-item-qty">
+          <button class="qty-btn">−</button>
+          <span>1</span>
+          <button class="qty-btn">+</button>
+        </div>
+      </div>
+    </div>
+    <div class="cart-item">
+      <div class="cart-item-img" style="background:#e8e0d4">🕯️</div>
+      <div class="cart-item-info">
+        <div class="cart-item-name">Beeswax Pillar Candle</div>
+        <div class="cart-item-price">$38.00</div>
+        <div class="cart-item-qty">
+          <button class="qty-btn">−</button>
+          <span>2</span>
+          <button class="qty-btn">+</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="cart-footer">
+    <div class="cart-total"><span>Subtotal</span><strong>$161.00</strong></div>
+    <button class="checkout-btn">Proceed to Checkout</button>
+  </div>
+</div>
+
+<script>
+  const products = [
+    { name: 'Handthrown Clay Bowl', material: 'Stoneware', price: '$65', emoji: '🥣', bg: '#e8ddd0' },
+    { name: 'Linen Throw Blanket', material: '100% Belgian Linen', price: '$120', emoji: '🧣', bg: '#d4c5b0' },
+    { name: 'Teak Serving Board', material: 'Reclaimed Teak', price: '$95', oldPrice: '$130', emoji: '🪵', bg: '#c9b99a', sale: true },
+    { name: 'Ceramic Vase — Sand', material: 'Artisan Ceramic', price: '$85', emoji: '🏺', bg: '#ddd0c0' },
+    { name: 'Beeswax Pillar Candle', material: 'Natural Beeswax', price: '$38', emoji: '🕯️', bg: '#e8e0d4' },
+    { name: 'Woven Rattan Basket', material: 'Sustainable Rattan', price: '$72', emoji: '🧺', bg: '#d0c4b0' },
+    { name: 'Marble Cheese Board', material: 'Calacatta Marble', price: '$145', emoji: '🪨', bg: '#e0d8d0' },
+    { name: 'Wool Cushion Cover', material: 'Merino Wool', price: '$58', emoji: '🟫', bg: '#c8b8a8' },
+  ];
+
+  const grid = document.getElementById('productsGrid');
+  products.forEach(p => {
+    grid.innerHTML += `
+      <div class="product-card">
+        <div class="product-image" style="background:${p.bg}">
+          <div class="product-image-bg" style="background:${p.bg}">${p.emoji}</div>
+          <div class="product-actions">
+            <button class="btn-add-cart" onclick="addToCart()">Add to Basket</button>
+            <button class="btn-wishlist">♡</button>
+          </div>
+        </div>
+        <div class="product-meta">
+          <div class="product-name">${p.name}</div>
+          <div class="product-material">${p.material}</div>
+          <div class="product-price">
+            ${p.sale ? `<span class="old">${p.oldPrice}</span><span class="sale">${p.price}</span>` : p.price}
+          </div>
+        </div>
+      </div>`;
+  });
+
+  function toggleCart() {
+    document.getElementById('cartOverlay').classList.toggle('open');
+    document.getElementById('cartSidebar').classList.toggle('open');
+  }
+
+  let count = 2;
+  function addToCart() {
+    count++;
+    document.getElementById('cartCount').textContent = count;
+    toggleCart(); 
+  }
+</script>
+</body>
+</html>

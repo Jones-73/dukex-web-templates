@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>John Chege — Creative Developer</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #f5f0e8;
+    --ink: #1a1410;
+    --rust: #c4572a;
+    --sand: #d4c5a9;
+    --muted: #8a7e70;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--cream);
+    color: var(--ink);
+    font-family: 'DM Mono', monospace;
+    font-weight: 300;
+    overflow-x: hidden;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 1.5rem 4rem;
+    mix-blend-mode: multiply;
+  }
+  .nav-logo { font-family: 'Playfair Display', serif; font-size: 1.2rem; }
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a { text-decoration: none; color: var(--ink); font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; transition: color 0.3s; }
+  .nav-links a:hover { color: var(--rust); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-left {
+    display: flex; flex-direction: column; justify-content: flex-end;
+    padding: 8rem 3rem 4rem 4rem;
+    background: var(--cream);
+    position: relative; z-index: 2;
+  }
+  .hero-tag {
+    font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--rust); margin-bottom: 2rem;
+  }
+  .hero-name {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(3rem, 7vw, 6rem);
+    line-height: 1.0;
+    margin-bottom: 1.5rem;
+  }
+  .hero-name em { font-style: italic; color: var(--rust); }
+  .hero-bio {
+    font-size: 0.85rem; line-height: 1.8; color: var(--muted);
+    max-width: 360px; margin-bottom: 3rem;
+  }
+  .hero-cta {
+    display: inline-block; padding: 1rem 2.5rem;
+    border: 1px solid var(--ink); text-decoration: none; color: var(--ink);
+    font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase;
+    transition: all 0.3s;
+  }
+  .hero-cta:hover { background: var(--ink); color: var(--cream); }
+
+  .hero-right {
+    background: var(--ink);
+    display: flex; align-items: center; justify-content: center;
+    position: relative; overflow: hidden;
+  }
+  .hero-portrait {
+    width: 100%; height: 100%;
+    background: linear-gradient(135deg, #2a2018 0%, #1a1410 100%);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 8rem; color: var(--sand); opacity: 0.3;
+    letter-spacing: -0.05em;
+  }
+  .hero-portrait::after {
+    content: 'JC';
+  }
+  .hero-scroll {
+    position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%);
+    font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--muted); display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+  }
+  .hero-scroll::after {
+    content: ''; width: 1px; height: 40px; background: var(--muted);
+    animation: scrollLine 1.5s ease-in-out infinite;
+  }
+  @keyframes scrollLine {
+    0%, 100% { opacity: 1; transform: scaleY(1); }
+    50% { opacity: 0.3; transform: scaleY(0.5); }
+  }
+
+  /* ABOUT */
+  .about {
+    padding: 8rem 4rem;
+    display: grid; grid-template-columns: 200px 1fr;
+    gap: 6rem;
+    border-top: 1px solid var(--sand);
+  }
+  .section-num {
+    font-size: 0.7rem; letter-spacing: 0.15em; color: var(--muted);
+    padding-top: 0.5rem;
+  }
+  .about-content h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 4vw, 3.5rem);
+    line-height: 1.2; margin-bottom: 2rem;
+  }
+  .about-content p { font-size: 0.85rem; line-height: 2; color: var(--muted); max-width: 600px; margin-bottom: 1.5rem; }
+  .skills-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-top: 3rem;
+  }
+  .skill-item {
+    padding: 1.5rem; border: 1px solid var(--sand);
+    font-size: 0.75rem; letter-spacing: 0.05em;
+    transition: all 0.3s;
+  }
+  .skill-item:hover { background: var(--ink); color: var(--cream); border-color: var(--ink); }
+  .skill-item span { display: block; font-size: 1.5rem; margin-bottom: 0.5rem; }
+
+  /* WORK */
+  .work {
+    padding: 6rem 4rem;
+    border-top: 1px solid var(--sand);
+  }
+  .work-header {
+    display: flex; justify-content: space-between; align-items: flex-end;
+    margin-bottom: 4rem;
+  }
+  .work-header h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 4vw, 3.5rem);
+  }
+  .work-filter { display: flex; gap: 1rem; }
+  .filter-btn {
+    padding: 0.5rem 1rem; border: 1px solid var(--sand); background: none;
+    font-family: 'DM Mono', monospace; font-size: 0.7rem;
+    letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer;
+    transition: all 0.3s; color: var(--muted);
+  }
+  .filter-btn.active, .filter-btn:hover { background: var(--ink); color: var(--cream); border-color: var(--ink); }
+
+  .projects-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2px; }
+  .project-card {
+    aspect-ratio: 4/3;
+    background: var(--ink);
+    position: relative; overflow: hidden; cursor: pointer;
+  }
+  .project-card:nth-child(3) { grid-column: span 2; aspect-ratio: 16/6; }
+  .project-bg {
+    width: 100%; height: 100%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 5rem; color: rgba(255,255,255,0.05);
+    transition: transform 0.6s ease;
+  }
+  .project-card:hover .project-bg { transform: scale(1.05); }
+  .project-overlay {
+    position: absolute; inset: 0;
+    background: rgba(26,20,16,0.85);
+    display: flex; flex-direction: column; justify-content: flex-end;
+    padding: 2.5rem;
+    opacity: 0; transition: opacity 0.4s;
+  }
+  .project-card:hover .project-overlay { opacity: 1; }
+  .project-cat { font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--rust); margin-bottom: 0.5rem; }
+  .project-title { font-family: 'Playfair Display', serif; font-size: 1.5rem; color: var(--cream); margin-bottom: 0.5rem; }
+  .project-desc { font-size: 0.75rem; color: var(--muted); line-height: 1.7; }
+
+  /* CONTACT */
+  .contact {
+    padding: 8rem 4rem;
+    border-top: 1px solid var(--sand);
+    display: grid; grid-template-columns: 1fr 1fr; gap: 6rem;
+  }
+  .contact h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 4vw, 4rem);
+    line-height: 1.1; margin-bottom: 2rem;
+  }
+  .contact h2 em { font-style: italic; color: var(--rust); }
+  .contact-info p { font-size: 0.85rem; line-height: 2; color: var(--muted); margin-bottom: 2rem; }
+  .contact-links { display: flex; gap: 1.5rem; flex-wrap: wrap; }
+  .contact-link {
+    font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--ink); text-decoration: none; border-bottom: 1px solid var(--ink);
+    padding-bottom: 2px; transition: color 0.3s;
+  }
+  .contact-link:hover { color: var(--rust); border-color: var(--rust); }
+  .contact-form { display: flex; flex-direction: column; gap: 1.5rem; }
+  .form-group { display: flex; flex-direction: column; gap: 0.5rem; }
+  .form-group label { font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); }
+  .form-group input, .form-group textarea {
+    background: none; border: none; border-bottom: 1px solid var(--sand);
+    padding: 0.75rem 0; font-family: 'DM Mono', monospace; font-size: 0.85rem;
+    color: var(--ink); outline: none; transition: border-color 0.3s; resize: none;
+  }
+  .form-group input:focus, .form-group textarea:focus { border-color: var(--ink); }
+  .form-submit {
+    padding: 1rem 2.5rem; background: var(--ink); color: var(--cream);
+    border: none; font-family: 'DM Mono', monospace;
+    font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase;
+    cursor: pointer; transition: opacity 0.3s; align-self: flex-start;
+  }
+  .form-submit:hover { opacity: 0.8; }
+
+  /* FOOTER */
+  footer {
+    padding: 2rem 4rem; border-top: 1px solid var(--sand);
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 0.65rem; letter-spacing: 0.1em; color: var(--muted);
+  }
+
+  /* ANIMATIONS */
+  .fade-up {
+    opacity: 0; transform: translateY(30px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .fade-up.visible { opacity: 1; transform: translateY(0); }
+
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    nav { padding: 1rem 1.5rem; }
+    .hero { grid-template-columns: 1fr; }
+    .hero-right { min-height: 40vh; }
+    .hero-left { padding: 6rem 1.5rem 3rem; }
+    .about { grid-template-columns: 1fr; gap: 2rem; padding: 4rem 1.5rem; }
+    .work { padding: 4rem 1.5rem; }
+    .work-header { flex-direction: column; align-items: flex-start; gap: 1.5rem; }
+    .projects-grid { grid-template-columns: 1fr; }
+    .project-card:nth-child(3) { grid-column: span 1; }
+    .skills-grid { grid-template-columns: 1fr 1fr; }
+    .contact { grid-template-columns: 1fr; padding: 4rem 1.5rem; gap: 3rem; }
+    footer { flex-direction: column; gap: 0.5rem; text-align: center; padding: 1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">AM</div>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#work">Work</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<section class="hero">
+  <div class="hero-left">
+    <p class="hero-tag">Creative Developer & Designer</p>
+    <h1 class="hero-name">John<br><em>Chege</em></h1>
+    <p class="hero-bio">I craft digital experiences that blur the line between design and engineering — obsessing over every pixel and interaction.</p>
+    <a href="#work" class="hero-cta">View My Work</a>
+  </div>
+  <div class="hero-right">
+    <div class="hero-portrait"></div>
+  </div>
+  <div class="hero-scroll">Scroll</div>
+</section>
+
+<section class="about" id="about">
+  <div class="section-num fade-up">01 / About</div>
+  <div class="about-content">
+    <h2 class="fade-up">Crafting <em style="font-family:'Playfair Display',serif;font-style:italic;color:var(--rust)">purposeful</em><br>digital experiences</h2>
+    <p class="fade-up">years building for the web, I specialise in creating interfaces that feel inevitable — where every decision serves the user's goal. I work at the intersection of design systems, animation, and performance.</p>
+    <p class="fade-up">Currently open to freelance projects and full-time opportunities with mission-driven teams.</p>
+    <div class="skills-grid fade-up">
+      <div class="skill-item"><span>⬡</span>React / Next.js</div>
+      <div class="skill-item"><span>◈</span>TypeScript</div>
+      <div class="skill-item"><span>◉</span>CSS / Animation</div>
+      <div class="skill-item"><span>▣</span>Figma / Design</div>
+      <div class="skill-item"><span>◐</span>Node / APIs</div>
+      <div class="skill-item"><span>◯</span>WebGL / Three.js</div>
+    </div>
+  </div>
+</section>
+
+<section class="work" id="work">
+  <div class="work-header fade-up">
+    <h2>Selected <em style="font-family:'Playfair Display',serif;font-style:italic">Work</em></h2>
+    <div class="work-filter">
+      <button class="filter-btn active">All</button>
+      <button class="filter-btn">Design</button>
+      <button class="filter-btn">Dev</button>
+    </div>
+  </div>
+  <div class="projects-grid fade-up">
+    <div class="project-card" style="background:#1e1a2e">
+      <div class="project-bg">◑</div>
+      <div class="project-overlay">
+        <p class="project-cat">Brand / Web</p>
+        <h3 class="project-title">Lumière Studio</h3>
+        <p class="project-desc">Brand identity and digital presence for a photography collective.</p>
+      </div>
+    </div>
+    <div class="project-card" style="background:#1a2a1e">
+      <div class="project-bg">⬡</div>
+      <div class="project-overlay">
+        <p class="project-cat">Web App</p>
+        <h3 class="project-title">Verde Finance</h3>
+        <p class="project-desc">ESG investment dashboard with real-time data visualization.</p>
+      </div>
+    </div>
+    <div class="project-card" style="background:#2a1a1a">
+      <div class="project-bg" style="font-size:8rem">✦</div>
+      <div class="project-overlay">
+        <p class="project-cat">E-commerce / Design System</p>
+        <h3 class="project-title">Artifact — Handcraft Marketplace</h3>
+        <p class="project-desc">Full-stack e-commerce platform with a bespoke design system built for artisanal makers.</p>
+      </div>
+    </div>
+    <div class="project-card" style="background:#1a1e2a">
+      <div class="project-bg">◈</div>
+      <div class="project-overlay">
+        <p class="project-cat">Motion / Interaction</p>
+        <h3 class="project-title">Orbit CMS</h3>
+        <p class="project-desc">Headless CMS with immersive content editing experience.</p>
+      </div>
+    </div>
+    <div class="project-card" style="background:#251a2a">
+      <div class="project-bg">◯</div>
+      <div class="project-overlay">
+        <p class="project-cat">3D / WebGL</p>
+        <h3 class="project-title">Terrain Explorer</h3>
+        <p class="project-desc">Interactive 3D terrain visualisation using Three.js and elevation data.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="contact" id="contact">
+  <div class="contact-info fade-up">
+    <h2>Let's make something <em>worth</em> making</h2>
+    <p>Whether you have a project in mind or just want to say hello — my inbox is always open.</p>
+    <div class="contact-links">
+      <a href="#" class="contact-link">hello@johnchege.dev</a>
+      <a href="#" class="contact-link">LinkedIn</a>
+      <a href="#" class="contact-link">GitHub</a>
+      <a href="#" class="contact-link">Dribbble</a>
+    </div>
+  </div>
+  <form class="contact-form fade-up" onsubmit="return false;">
+    <div class="form-group">
+      <label>Name</label>
+      <input type="text" placeholder="Your name">
+    </div>
+    <div class="form-group">
+      <label>Email</label>
+      <input type="email" placeholder="your@email.com">
+    </div>
+    <div class="form-group">
+      <label>Message</label>
+      <textarea rows="5" placeholder="Tell me about your project..."></textarea>
+    </div>
+    <button type="submit" class="form-submit">Send Message</button>
+  </form>
+</section>
+
+<footer>
+  <span>© 2026 John Chege</span>
+  <span>john chege the Coding Duke</span>
+</footer>
+
+<script>
+  // Intersection Observer for fade-up animations
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+  // Filter buttons
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    });
+  });
+</script>
+</body>
+</html>
